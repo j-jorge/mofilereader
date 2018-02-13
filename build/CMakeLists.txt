@@ -15,12 +15,6 @@
 cmake_minimum_required(VERSION 2.6)
 project(moFileReader)
 
-# Set Output Directories.
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ../lib)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ../lib)
-
-
 # The main include directory
 include_directories(BEFORE ../include)
 
@@ -30,9 +24,6 @@ add_subdirectory(bin)
 # Let the user choose between static lib and dll
 # To use it, call cmake -DCOMPILE_DLL=ON
 option(COMPILE_DLL "Set this to ON if you want to compile the library as an DLL. When this is OFF, a static library is created (default)." OFF)
-
-# Dependency
-link_directories(../lib)
 
 if ( NOT COMPILE_DLL )
 

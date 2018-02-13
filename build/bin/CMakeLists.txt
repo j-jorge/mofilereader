@@ -1,7 +1,3 @@
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../../bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ../../lib)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ../../lib)
-
 add_executable(moReader ../../src/mo.cpp)
 
 if ( NOT COMPILE_DLL )
