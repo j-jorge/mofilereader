@@ -373,7 +373,7 @@ public:
       * \param[in,out] id The id of the translation to search for.
       * \return The value you passed in via _id or the translated string.
       */
-    virtual std::string Lookup( const char* id ) const;
+    virtual const char* Lookup( const char* id ) const;
 
     /// \brief Returns the Error Description.
     virtual const std::string& GetErrorDescription() const;

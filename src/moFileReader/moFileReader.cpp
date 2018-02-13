@@ -61,7 +61,7 @@ uint32_t moFileReader::GetNumStrings() const
     return m_lookup.size();
 }
 
-std::string moFileReader::Lookup( const char* id ) const
+const char* moFileReader::Lookup( const char* id ) const
 {
     if ( m_lookup.size() <= 0) return id;
     moLookupList::const_iterator iterator = m_lookup.find(id);    
@@ -70,7 +70,7 @@ std::string moFileReader::Lookup( const char* id ) const
     {
         return id;
     }
-    return iterator->second;
+    return iterator->second.c_str();
 }
 
 moFileReader::eErrorCode moFileReader::ParseData(std::string data)
