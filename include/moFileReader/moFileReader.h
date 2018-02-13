@@ -39,6 +39,7 @@
 #include <cstring> // this is for memset when compiling with gcc.
 #include <string>
 #include <sstream>
+#include <vector>
 
 #ifndef __MOFILECONFIG_H_INCLUDED__
 #   include "moFileReader/moFileConfig.h"
@@ -311,7 +312,7 @@ class MOEXPORT moFileReader
 {
 protected:
     /// \brief Type for the map which holds the translation-pairs later.
-    typedef std::map<std::string, std::string> moLookupList;
+    typedef std::map<std::string, std::vector< std::string > > moLookupList;
 
 public:
 
@@ -374,6 +375,7 @@ public:
       * \return The value you passed in via _id or the translated string.
       */
     virtual const char* Lookup( const char* id ) const;
+    virtual const char* Lookup( const char* id, uint32_t plural ) const;
 
     /// \brief Returns the Error Description.
     virtual const std::string& GetErrorDescription() const;

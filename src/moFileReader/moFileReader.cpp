@@ -63,14 +63,18 @@ uint32_t moFileReader::GetNumStrings() const
 
 const char* moFileReader::Lookup( const char* id ) const
 {
-    if ( m_lookup.size() <= 0) return id;
+    return Lookup( id, 0 );
+}
+
+const char* moFileReader::Lookup( const char* id, uint32_t plural ) const
+{
     moLookupList::const_iterator iterator = m_lookup.find(id);    
 
-    if ( iterator == m_lookup.end() )
-    {
+    if ( ( iterator == m_lookup.end() )
+         || ( iterator->second.size() <= plural ) )
         return id;
-    }
-    return iterator->second.c_str();
+
+    return iterator->second[ plural ].c_str();
 }
 
 moFileReader::eErrorCode moFileReader::ParseData(std::string data)
@@ -193,10 +197,12 @@ moFileReader::eErrorCode moFileReader::ParseData(std::string data)
             
             return moFileReader::EC_FILEINVALID;
         }
-        
+
         // Store it in the map.
-        m_lookup[std::string(original)] = std::string(translation);
-        
+        for ( int32_t i( 0 ); i < trLength; i += strlen( translation + i ) + 1 )
+            m_lookup[ std::string(original) ].push_back
+                ( std::string( translation + i ) );
+            
         // Cleanup...
         delete[] original;
         delete[] translation;
@@ -208,135 +214,17 @@ moFileReader::eErrorCode moFileReader::ParseData(std::string data)
 
 moFileReader::eErrorCode moFileReader::ReadFile( const char* filename )
 {    
-    // Creating a file-description.
-    moFileInfo moInfo;
-
-    // Reference to the List inside moInfo.
-    moFileInfo::moTranslationPairList& TransPairInfo = moInfo.m_translationPairInformation;
-
-    // Opening the file.
-    std::ifstream stream( filename, std::ios_base::binary | std::ios_base::in );
+    std::ifstream stream( filename );
     if ( !stream.is_open() )
     {
         m_error = std::string("Cannot open File ") + std::string(filename);
         return moFileReader::EC_FILENOTFOUND;
     }
 
-    // Read in all the 4 bytes of fire-magic, offsets and stuff...
-    stream.read((char*)&moInfo.m_magicNumber, 4);
-    stream.read((char*)&moInfo.m_fileVersion, 4);
-    stream.read((char*)&moInfo.m_numStrings, 4);
-    stream.read((char*)&moInfo.m_offsetOriginal, 4);
-    stream.read((char*)&moInfo.m_offsetTranslation, 4);
-    stream.read((char*)&moInfo.m_sizeHashtable, 4);
-    stream.read((char*)&moInfo.m_offsetHashtable, 4);
-
-    if ( stream.bad() )
-    {
-        stream.close();
-        m_error = "Stream bad during reading. The .mo-file seems to be invalid or has bad descriptions!";
-        return moFileReader::EC_FILEINVALID;
-    }
-
-    // Checking the Magic Number
-    if ( MagicNumber != moInfo.m_magicNumber )
-    {
-        if ( MagicReversed != moInfo.m_magicNumber )
-        {
-            m_error = "The Magic Number does not match in all cases!";
-            return moFileReader::EC_MAGICNUMBER_NOMATCH;
-        }
-        else
-        {
-            moInfo.m_reversed = true;
-            m_error = "Magic Number is reversed. We do not support this yet!";
-            return moFileReader::EC_MAGICNUMBER_REVERSED;
-        }
-    }  
-    
-    // Now we search all Length & Offsets of the original strings
-    for ( int32_t i = 0; i < moInfo.m_numStrings; i++ )
-    {
-        moTranslationPairInformation _str;        
-        stream.read((char*)&_str.m_orLength, 4);
-        stream.read((char*)&_str.m_orOffset, 4);
-        if ( stream.bad() )
-        {
-            stream.close();
-            m_error = "Stream bad during reading. The .mo-file seems to be invalid or has bad descriptions!";
-            return moFileReader::EC_FILEINVALID;
-        }
-
-        TransPairInfo.push_back(_str);
-    }
-
-    // Get all Lengths & Offsets of the translated strings
-    // Be aware: The Descriptors already exist in our list, so we just mod. refs from the deque.
-    for ( int32_t i = 0; i < moInfo.m_numStrings; i++ )
-    {
-        moTranslationPairInformation& _str = TransPairInfo[i];
-        stream.read((char*)&_str.m_trLength, 4);
-        stream.read((char*)&_str.m_trOffset, 4);
-        if ( stream.bad() )
-        {
-            stream.close();
-            m_error = "Stream bad during reading. The .mo-file seems to be invalid or has bad descriptions!";
-            return moFileReader::EC_FILEINVALID;
-        }
-    }
-
-    // Normally you would read the hash-table here, but we don't use it. :)
-
-    // Now to the int32_teresting part, we read the strings-pairs now
-    for ( int32_t i = 0; i < moInfo.m_numStrings; i++)
-    {
-        // We need a length of +1 to catch the trailing \0.
-        int32_t orLength = TransPairInfo[i].m_orLength+1;
-        int32_t trLength = TransPairInfo[i].m_trLength+1;
-
-        int32_t orOffset = TransPairInfo[i].m_orOffset;
-        int32_t trOffset = TransPairInfo[i].m_trOffset;
-
-        // Original
-        char* original  = new char[orLength];
-        memset(original, 0, sizeof(char)*orLength);
-
-        stream.seekg(orOffset);
-        stream.read(original, orLength);
-
-        if ( stream.bad() )
-        {
-            m_error = "Stream bad during reading. The .mo-file seems to be invalid or has bad descriptions!";
-            return moFileReader::EC_FILEINVALID;
-        }
-        
-        // Translation
-        char* translation = new char[trLength];
-        memset(translation, 0, sizeof(char)*trLength);
-
-        stream.seekg(trOffset);
-        stream.read(translation, trLength);
-
-        if ( stream.bad() )
-        {
-            m_error = "Stream bad during reading. The .mo-file seems to be invalid or has bad descriptions!";
-            return moFileReader::EC_FILEINVALID;
-        }
-
-        // Store it in the map.    
-        m_lookup[std::string(original)] = std::string(translation);
-
-        // Cleanup...
-        delete original;
-        delete translation;
-    }
-
-    // Done :)
-    stream.close();
-    return moFileReader::EC_SUCCESS;
+    std::stringstream iss;
+    iss << stream.rdbuf();
+    return ParseData( iss.str() );
 }
-
-
 
 moFileReader::eErrorCode moFileReader::ExportAsHTML(std::string infile, std::string filename, std::string css )
 {
@@ -412,7 +300,7 @@ moFileReader::eErrorCode moFileReader::ExportAsHTML(std::string infile, std::str
         {
             if ( it->first != "" ) // Skip the empty msgid, its the table we handled above.
             {
-                stream << "<tr><td>" << it->first << "</td><td>" <<  it->second << "</td></tr>" << std::endl;
+                stream << "<tr><td>" << it->first << "</td><td>" <<  it->second.front() << "</td></tr>" << std::endl;
             }
         }
         stream << "</table><br/>" << std::endl;
