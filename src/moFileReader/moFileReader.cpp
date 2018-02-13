@@ -171,6 +171,8 @@ moFileReader::eErrorCode moFileReader::ParseData(std::string data)
         {
             m_error = "Stream bad during reading. The .mo-file seems to be invalid or has bad descriptions!";
             printf("%s", m_error.c_str());
+
+            delete[] original;
             return moFileReader::EC_FILEINVALID;
         }
         
@@ -185,6 +187,10 @@ moFileReader::eErrorCode moFileReader::ParseData(std::string data)
         {
             m_error = "Stream bad during reading. The .mo-file seems to be invalid or has bad descriptions!";
             printf("%s", m_error.c_str());
+
+            delete[] original;
+            delete[] translation;
+            
             return moFileReader::EC_FILEINVALID;
         }
         
@@ -192,8 +198,8 @@ moFileReader::eErrorCode moFileReader::ParseData(std::string data)
         m_lookup[std::string(original)] = std::string(translation);
         
         // Cleanup...
-        delete original;
-        delete translation;
+        delete[] original;
+        delete[] translation;
     }
     
     // Done :)
