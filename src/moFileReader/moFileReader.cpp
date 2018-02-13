@@ -30,7 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "../include/moFileReader.h"
+#include "moFileReader/moFileReader.h"
 #include <iostream>
 #include <cstdlib>
 
@@ -56,7 +56,7 @@ void moFileReader::ClearTable()
     m_lookup.clear();
 }
 
-unsigned int moFileReader::GetNumStrings() const
+uint32_t moFileReader::GetNumStrings() const
 {
     return m_lookup.size();
 }
@@ -118,7 +118,7 @@ moFileReader::eErrorCode moFileReader::ParseData(std::string data)
     }
     
     // Now we search all Length & Offsets of the original strings
-    for ( int i = 0; i < moInfo.m_numStrings; i++ )
+    for ( int32_t i = 0; i < moInfo.m_numStrings; i++ )
     {
         moTranslationPairInformation _str;
         stream.read((char*)&_str.m_orLength, 4);
@@ -135,7 +135,7 @@ moFileReader::eErrorCode moFileReader::ParseData(std::string data)
     
     // Get all Lengths & Offsets of the translated strings
     // Be aware: The Descriptors already exist in our list, so we just mod. refs from the deque.
-    for ( int i = 0; i < moInfo.m_numStrings; i++ )
+    for ( int32_t i = 0; i < moInfo.m_numStrings; i++ )
     {
         moTranslationPairInformation& _str = TransPairInfo[i];
         stream.read((char*)&_str.m_trLength, 4);
@@ -150,15 +150,15 @@ moFileReader::eErrorCode moFileReader::ParseData(std::string data)
     
     // Normally you would read the hash-table here, but we don't use it. :)
     
-    // Now to the interesting part, we read the strings-pairs now
-    for ( int i = 0; i < moInfo.m_numStrings; i++)
+    // Now to the int32_teresting part, we read the strings-pairs now
+    for ( int32_t i = 0; i < moInfo.m_numStrings; i++)
     {
         // We need a length of +1 to catch the trailing \0.
-        int orLength = TransPairInfo[i].m_orLength+1;
-        int trLength = TransPairInfo[i].m_trLength+1;
+        int32_t orLength = TransPairInfo[i].m_orLength+1;
+        int32_t trLength = TransPairInfo[i].m_trLength+1;
         
-        int orOffset = TransPairInfo[i].m_orOffset;
-        int trOffset = TransPairInfo[i].m_trOffset;
+        int32_t orOffset = TransPairInfo[i].m_orOffset;
+        int32_t trOffset = TransPairInfo[i].m_trOffset;
         
         // Original
         char* original  = new char[orLength];
@@ -249,7 +249,7 @@ moFileReader::eErrorCode moFileReader::ReadFile( const char* filename )
     }  
     
     // Now we search all Length & Offsets of the original strings
-    for ( int i = 0; i < moInfo.m_numStrings; i++ )
+    for ( int32_t i = 0; i < moInfo.m_numStrings; i++ )
     {
         moTranslationPairInformation _str;        
         stream.read((char*)&_str.m_orLength, 4);
@@ -266,7 +266,7 @@ moFileReader::eErrorCode moFileReader::ReadFile( const char* filename )
 
     // Get all Lengths & Offsets of the translated strings
     // Be aware: The Descriptors already exist in our list, so we just mod. refs from the deque.
-    for ( int i = 0; i < moInfo.m_numStrings; i++ )
+    for ( int32_t i = 0; i < moInfo.m_numStrings; i++ )
     {
         moTranslationPairInformation& _str = TransPairInfo[i];
         stream.read((char*)&_str.m_trLength, 4);
@@ -281,15 +281,15 @@ moFileReader::eErrorCode moFileReader::ReadFile( const char* filename )
 
     // Normally you would read the hash-table here, but we don't use it. :)
 
-    // Now to the interesting part, we read the strings-pairs now
-    for ( int i = 0; i < moInfo.m_numStrings; i++)
+    // Now to the int32_teresting part, we read the strings-pairs now
+    for ( int32_t i = 0; i < moInfo.m_numStrings; i++)
     {
         // We need a length of +1 to catch the trailing \0.
-        int orLength = TransPairInfo[i].m_orLength+1;
-        int trLength = TransPairInfo[i].m_trLength+1;
+        int32_t orLength = TransPairInfo[i].m_orLength+1;
+        int32_t trLength = TransPairInfo[i].m_trLength+1;
 
-        int orOffset = TransPairInfo[i].m_orOffset;
-        int trOffset = TransPairInfo[i].m_trOffset;
+        int32_t orOffset = TransPairInfo[i].m_orOffset;
+        int32_t trOffset = TransPairInfo[i].m_trOffset;
 
         // Original
         char* original  = new char[orLength];
@@ -348,7 +348,7 @@ moFileReader::eErrorCode moFileReader::ExportAsHTML(std::string infile, std::str
 
     // Beautify Output
     std::string fname;
-    unsigned int pos = infile.find_last_of(moPATHSEP);
+    std::size_t pos = infile.find_last_of(moPATHSEP);
     if ( pos != std::string::npos )
     {
         fname = infile.substr( pos+1, infile.length() );
@@ -466,7 +466,7 @@ bool moFileReader::GetPoEditorString(const char* buffer, std::string& name, std:
 void moFileReader::MakeHtmlConform(std::string& inout)
 {
     std::string temp = inout;
-    for ( unsigned int i = 0; i < temp.length(); i++)
+    for ( uint32_t i = 0; i < temp.length(); i++)
     {
         if ( temp[i] == '>')
         {

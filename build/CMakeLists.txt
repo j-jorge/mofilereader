@@ -28,13 +28,15 @@ option(COMPILE_DLL "Set this to ON if you want to compile the library as an DLL.
 if ( NOT COMPILE_DLL )
 
     # Static build
-    add_library(moFileReader.static STATIC ../src/moFileReader.cpp ../src/mo.cpp)
+    add_library(moFileReader.static STATIC
+      ../src/moFileReader/moFileReader.cpp)
 
 else ( COMPILE_DLL )
 
     # DLL
     add_definitions(-D_USRDLL -DMOFILE_EXPORTS)
-    add_library(moFileReader SHARED ../src/moFileReader.cpp ../src/mo.cpp)
+    add_library(moFileReader SHARED
+      ../src/moFileReader/moFileReader.cpp)
 
 endif ()
 

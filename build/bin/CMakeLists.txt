@@ -1,4 +1,4 @@
-add_executable(moReader ../../src/mo.cpp)
+add_executable(moReader ../../src/moFileReader/mo.cpp)
 
 if ( NOT COMPILE_DLL )
 

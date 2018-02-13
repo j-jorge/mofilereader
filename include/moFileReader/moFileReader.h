@@ -41,7 +41,7 @@
 #include <sstream>
 
 #ifndef __MOFILECONFIG_H_INCLUDED__
-#   include "moFileConfig.h"
+#   include "moFileReader/moFileConfig.h"
 #endif
 
 /** \mainpage moFileReaderSDK
