@@ -110,7 +110,7 @@ moFileReader::eErrorCode moFileReader::ParseData(std::string data)
         if ( MagicReversed != moInfo.m_magicNumber )
         {
             m_error = "The Magic Number does not match in all cases!";
-            printf("%s", m_error.c_str());
+            printf("%s\n", m_error.c_str());
             return moFileReader::EC_MAGICNUMBER_NOMATCH;
         }
         else
@@ -130,7 +130,7 @@ moFileReader::eErrorCode moFileReader::ParseData(std::string data)
         if ( stream.bad() )
         {
             m_error = "Stream bad during reading. The .mo-file seems to be invalid or has bad descriptions!";
-            printf("%s", m_error.c_str());
+            printf("%s\n", m_error.c_str());
             return moFileReader::EC_FILEINVALID;
         }
         
@@ -147,7 +147,7 @@ moFileReader::eErrorCode moFileReader::ParseData(std::string data)
         if ( stream.bad() )
         {
             m_error = "Stream bad during reading. The .mo-file seems to be invalid or has bad descriptions!";
-            printf("%s", m_error.c_str());
+            printf("%s\n", m_error.c_str());
             return moFileReader::EC_FILEINVALID;
         }
     }
@@ -174,7 +174,7 @@ moFileReader::eErrorCode moFileReader::ParseData(std::string data)
         if ( stream.bad() )
         {
             m_error = "Stream bad during reading. The .mo-file seems to be invalid or has bad descriptions!";
-            printf("%s", m_error.c_str());
+            printf("%s\n", m_error.c_str());
 
             delete[] original;
             return moFileReader::EC_FILEINVALID;
@@ -190,7 +190,7 @@ moFileReader::eErrorCode moFileReader::ParseData(std::string data)
         if ( stream.bad() )
         {
             m_error = "Stream bad during reading. The .mo-file seems to be invalid or has bad descriptions!";
-            printf("%s", m_error.c_str());
+            printf("%s\n", m_error.c_str());
 
             delete[] original;
             delete[] translation;
