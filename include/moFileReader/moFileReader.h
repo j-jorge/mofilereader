@@ -224,16 +224,16 @@ struct moTranslationPairInformation
     {}
 
     /// \brief Length of the Original String
-    int m_orLength;
+    int32_t m_orLength;
 
     /// \brief Offset of the Original String (absolute)
-    int m_orOffset;
+    int32_t m_orOffset;
 
     /// \brief Length of the Translated String
-    int m_trLength;
+    int32_t m_trLength;
 
     /// \brief Offset of the Translated String (absolute)
-    int m_trOffset;
+    int32_t m_trOffset;
 };
 
 /**
@@ -259,25 +259,25 @@ struct moFileInfo
     {}
 
     /// \brief The Magic Number, compare it to g_MagicNumber.
-    int m_magicNumber;          
+    int32_t m_magicNumber;          
     
     /// \brief The File Version, 0 atm according to the manpage.
-    int m_fileVersion;          
+    int32_t m_fileVersion;          
 
     /// \brief Number of Strings in the .mo-file.
-    int m_numStrings;           
+    int32_t m_numStrings;           
 
     /// \brief Offset of the Table of the Original Strings
-    int m_offsetOriginal;       
+    int32_t m_offsetOriginal;       
 
     /// \brief Offset of the Table of the Translated Strings
-    int m_offsetTranslation;    
+    int32_t m_offsetTranslation;    
 
     /// \brief Size of 1 Entry in the Hashtable.
-    int m_sizeHashtable;       
+    int32_t m_sizeHashtable;       
 
     /// \brief The Offset of the Hashtable.
-    int m_offsetHashtable;      
+    int32_t m_offsetHashtable;      
 
     /** \brief Tells you if the bytes are reversed
       * \note When this is true, the bytes are reversed and the Magic number is like g_MagicReversed
@@ -317,10 +317,10 @@ protected:
 public:
 
     /// \brief The Magic Number describes the endianess of bytes on the system.   
-    static const long MagicNumber   = 0x950412DE;
+    static const int32_t MagicNumber   = 0x950412DE;
 
     /// \brief If the Magic Number is Reversed, we need to swap the bytes.     
-    static const long MagicReversed = 0xDE120495;
+    static const int32_t MagicReversed = 0xDE120495;
 
     /// \brief The possible errorcodes for methods of this class
     enum eErrorCode
@@ -387,7 +387,7 @@ public:
       * \note The mo-File-table always contains an empty msgid, which contains informations
       *       about the tranlsation-project. So the real number of strings is always minus 1.
       */
-    virtual unsigned int GetNumStrings() const;
+    virtual uint32_t GetNumStrings() const;
 
     /** \brief Exports the whole content of the .mo-File as .html
       * \param[in] infile The .mo-File to export. 
@@ -406,7 +406,7 @@ protected:
       * \param[in] in The value to swap.
       * \return The swapped value.
       */
-    unsigned long SwapBytes(unsigned long in);    
+    uint32_t SwapBytes(uint32_t in);    
 
 private:
     // Holds the lookup-table
@@ -480,9 +480,9 @@ inline std::string moFileGetErrorDescription()
 }
 
 /// \brief Returns the number of entries loaded from the .mo-File.
-inline int moFileGetNumStrings()
+inline int32_t moFileGetNumStrings()
 {
-    int r = moFileReaderSingleton::GetInstance().GetNumStrings();
+    int32_t r = moFileReaderSingleton::GetInstance().GetNumStrings();
     return r;
 }
 

@@ -36,12 +36,12 @@
 
 MO_BEGIN_NAMESPACE
 
-unsigned long moFileReader::SwapBytes(unsigned long in) 
+uint32_t moFileReader::SwapBytes(uint32_t in) 
 {
-    unsigned long b0 = (in >> 0) & 0xff;
-    unsigned long b1 = (in >> 8) & 0xff;
-    unsigned long b2 = (in >> 16) & 0xff;
-    unsigned long b3 = (in >> 24) & 0xff;
+    uint32_t b0 = (in >> 0) & 0xff;
+    uint32_t b1 = (in >> 8) & 0xff;
+    uint32_t b2 = (in >> 16) & 0xff;
+    uint32_t b3 = (in >> 24) & 0xff;
 
     return (b0 << 24) | (b1 << 16) | (b2 << 8) | b3;
 }
