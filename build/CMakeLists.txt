@@ -28,7 +28,7 @@ option(COMPILE_DLL "Set this to ON if you want to compile the library as an DLL.
 if ( NOT COMPILE_DLL )
 
     # Static build
-    add_library(moFileReader.static STATIC
+    add_library(moFileReader STATIC
       ../src/moFileReader/moFileReader.cpp)
 
 else ( COMPILE_DLL )
@@ -40,8 +40,12 @@ else ( COMPILE_DLL )
 
 endif ()
 
+install(
+  TARGETS moFileReader
+  DESTINATION lib
+  )
 
-
-
-
-
+install(
+  DIRECTORY ../include/
+  DESTINATION include
+  )
