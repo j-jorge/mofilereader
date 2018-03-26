@@ -5,6 +5,9 @@
 #   - COMPILE_DLL 
 #     - ON  : Compiles the code as a shared Library
 #     - OFF : Compiles the code as a static Library
+#   - COMPILE_APP
+#     - ON  : Compiles the application.
+#     - OFF : Skip the application.
 #   - BUILD_DEBUG
 #     - ON  : Compiles Debug-Information into the output
 #     - OFF : Optimizes the compilation with O2.
@@ -18,8 +21,12 @@ project(moFileReader)
 # The main include directory
 include_directories(BEFORE ../include)
 
+option(COMPILE_APP "Set this to ON if you want to compile the app (default)." ON)
+
 # executable build directory
-add_subdirectory(bin)
+if( COMPILE_APP )
+    add_subdirectory(bin)
+endif()
 
 # Let the user choose between static lib and dll
 # To use it, call cmake -DCOMPILE_DLL=ON
