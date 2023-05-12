@@ -2,7 +2,7 @@
 # moFileReader Main Build Script
 #
 # Defined Variables:
-#   - COMPILE_DLL 
+#   - COMPILE_DLL
 #     - ON  : Compiles the code as a shared Library
 #     - OFF : Compiles the code as a static Library
 #   - COMPILE_APP
@@ -15,7 +15,7 @@
 # Run cmake with -DVARNAME=ON/OFF to benefit from those
 # possible settings.
 #-------------------------------------------------------
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.0)
 project(moFileReader)
 
 option(COMPILE_APP "Set this to ON if you want to compile the app (default)." ON)
