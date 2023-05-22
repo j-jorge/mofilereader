@@ -34,7 +34,7 @@
 #define __MOFILEREADER_H_INCLUDED__
 
 #include <deque>
-#include <map>
+#include <unordered_map>
 #include <fstream>
 #include <cstdint>
 #include <cstring> // this is for memset when compiling with gcc.
@@ -313,7 +313,8 @@ class MOEXPORT moFileReader
 {
 protected:
     /// \brief Type for the map which holds the translation-pairs later.
-    typedef std::map<std::string, std::vector< std::string > > moLookupList;
+    typedef
+    std::unordered_map<std::string, std::vector< std::string > > moLookupList;
 
 public:
 
