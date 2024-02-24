@@ -15,7 +15,7 @@
 # Run cmake with -DVARNAME=ON/OFF to benefit from those
 # possible settings.
 #-------------------------------------------------------
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.22)
 project(moFileReader)
 
 option(COMPILE_APP "Set this to ON if you want to compile the app (default)." ON)
